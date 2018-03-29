@@ -18,7 +18,7 @@ Examples
 
 Creates default instances of `u8` type:
 
-```
+```rust
 use factory::{DefaultFactory, Factory};
 
 let f = DefaultFactory::<u8>::new();
