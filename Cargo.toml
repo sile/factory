@@ -2,6 +2,15 @@
 name = "factory"
 version = "0.1.0"
 authors = ["Takeru Ohta <phjgt308@gmail.com>"]
+description = "`Factory` trait and its implementations"
+homepage = "https://github.com/sile/factory"
+repository = "https://github.com/sile/factory"
+readme = "README.md"
+license = "MIT"
+
+[badges]
+travis-ci = {repository = "sile/factory"}
+codecov = {repository = "sile/factory"}
 
 [dependencies]
 atomic_immut = { version = "0.1", optional = true }
