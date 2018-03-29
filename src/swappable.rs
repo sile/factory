@@ -3,7 +3,7 @@ use atomic_immut::AtomicImmut;
 
 use Factory;
 
-/// A `Factory` that allows for swapping inner factories dynamically.
+/// `#[cfg(feature = "swappable")]` A `Factory` that allows for swapping inner factories dynamically.
 ///
 /// # Examples
 ///
