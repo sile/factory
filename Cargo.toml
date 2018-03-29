@@ -1,0 +1,13 @@
+[package]
+name = "factory"
+version = "0.1.0"
+authors = ["Takeru Ohta <phjgt308@gmail.com>"]
+
+[dependencies]
+atomic_immut = { version = "0.1", optional = true }
+
+[features]
+swappable = ["atomic_immut"]
+
+[package.metadata.docs.rs]
+all-features = true
