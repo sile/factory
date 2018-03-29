@@ -1,3 +1,20 @@
+//! This crate provides `Factory` trait and its implementations.
+//!
+//! The trait makes it possible to create any number of instances of a specific type.
+//!
+//! # Examples
+//!
+//! Creates default instances of `u8` type:
+//!
+//! ```
+//! use factory::{DefaultFactory, Factory};
+//!
+//! let f = DefaultFactory::<u8>::new();
+//! assert_eq!(f.create(), 0);
+//! assert_eq!(f.create(), 0);
+//! ```
+#![warn(missing_docs)]
+
 #[cfg(feature = "swappable")]
 extern crate atomic_immut;
 
@@ -9,15 +26,29 @@ use std::marker::PhantomData;
 #[cfg(feature = "swappable")]
 mod swappable;
 
+/// This trait allows for creating any number of instances of the `Item` type.
 pub trait Factory {
+    /// The type of instances created by this factory.
     type Item;
 
+    /// Creates an instance.
     fn create(&self) -> Self::Item;
 }
 
+/// A `Factory` that creates instances using `T::default()` function.
+///
+/// # Examples
+///
+/// ```
+/// use factory::{DefaultFactory, Factory};
+///
+/// let f = DefaultFactory::<u8>::new();
+/// assert_eq!(f.create(), 0);
+/// ```
 #[derive(Debug, Default)]
 pub struct DefaultFactory<T>(PhantomData<T>);
 impl<T: Default> DefaultFactory<T> {
+    /// Makes a new `DefaultFactory`.
     pub fn new() -> Self {
         DefaultFactory(PhantomData)
     }
@@ -37,17 +68,32 @@ impl<T> Clone for DefaultFactory<T> {
 unsafe impl<T> Send for DefaultFactory<T> {}
 unsafe impl<T> Sync for DefaultFactory<T> {}
 
+/// A `Factory` that creates instances using `T::clone()` method.
+///
+/// # Examples
+///
+/// ```
+/// use factory::{CloneFactory, Factory};
+///
+/// let f = CloneFactory::new(10);
+/// assert_eq!(f.create(), 10);
+/// ```
 #[derive(Debug, Default, Clone)]
 pub struct CloneFactory<T>(T);
 impl<T: Clone> CloneFactory<T> {
+    /// Makes a new `CloneFactory`.
+    ///
+    /// The instances the factory creates are copied from `original`.
     pub fn new(original: T) -> Self {
         CloneFactory(original)
     }
 
+    /// Returns a reference to the original instance.
     pub fn get_ref(&self) -> &T {
         &self.0
     }
 
+    /// Returns a mutable reference to the original instance.
     pub fn get_mut(&mut self) -> &mut T {
         &mut self.0
     }

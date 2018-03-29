@@ -3,17 +3,38 @@ use atomic_immut::AtomicImmut;
 
 use Factory;
 
+/// A `Factory` that allows for swapping inner factories dynamically.
+///
+/// # Examples
+///
+/// ```
+/// use factory::{CloneFactory, Factory, SwappableFactory};
+///
+/// let f0 = SwappableFactory::new(CloneFactory::new(32));
+/// let f1 = f0.clone();
+/// assert_eq!(f0.create(), 32);
+/// assert_eq!(f1.create(), 32);
+///
+/// f0.swap(CloneFactory::new(50));
+/// assert_eq!(f0.create(), 50);
+/// assert_eq!(f1.create(), 50);
+/// ```
 #[derive(Debug, Default)]
 pub struct SwappableFactory<T>(Arc<AtomicImmut<T>>);
 impl<T: Factory> SwappableFactory<T> {
+    /// Makes a new `SwappableFactory` with the initial inner factory.
     pub fn new(inner: T) -> Self {
         SwappableFactory(Arc::new(AtomicImmut::new(inner)))
     }
 
+    /// Returns the currently used factory.
     pub fn get(&self) -> Arc<T> {
         self.0.load()
     }
 
+    /// Updates inner factory by `new`, and returns old one.
+    ///
+    /// This operation affects all `SwappableFactory` instances cloned from the original one.
     pub fn swap(&self, new: T) -> Arc<T> {
         self.0.swap(new)
     }
