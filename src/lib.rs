@@ -34,6 +34,13 @@ pub trait Factory {
     /// Creates an instance.
     fn create(&self) -> Self::Item;
 }
+impl<T: ?Sized + Factory> Factory for Box<T> {
+    type Item = T::Item;
+
+    fn create(&self) -> Self::Item {
+        (**self).create()
+    }
+}
 
 /// A `Factory` that creates instances using `T::default()` function.
 ///

@@ -5,6 +5,8 @@ use Factory;
 
 /// `#[cfg(feature = "swappable")]` A `Factory` that allows for swapping inner factories dynamically.
 ///
+/// This use a lock-free data structure for swapping.
+///
 /// # Examples
 ///
 /// ```
@@ -54,7 +56,7 @@ impl<T> Clone for SwappableFactory<T> {
 
 #[cfg(test)]
 mod test {
-    use {CloneFactory, Factory};
+    use {CloneFactory, DefaultFactory, Factory};
     use super::*;
 
     #[test]
@@ -64,5 +66,16 @@ mod test {
 
         f.swap(CloneFactory::new(50));
         assert_eq!(f.create(), 50);
+    }
+
+    #[test]
+    fn swappable_box_factory_works() {
+        let first: Box<Factory<Item = i32> + 'static> = Box::new(CloneFactory::new(32));
+        let f = SwappableFactory::new(first);
+        assert_eq!(f.create(), 32);
+
+        let second = Box::new(DefaultFactory::new());
+        f.swap(second);
+        assert_eq!(f.create(), 0);
     }
 }
