@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use atomic_immut::AtomicImmut;
+use std::sync::Arc;
 
 use Factory;
 
@@ -56,8 +56,8 @@ impl<T> Clone for SwappableFactory<T> {
 
 #[cfg(test)]
 mod test {
-    use {CloneFactory, DefaultFactory, Factory};
     use super::*;
+    use {CloneFactory, DefaultFactory, Factory};
 
     #[test]
     fn swappable_factory_works() {
