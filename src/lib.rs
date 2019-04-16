@@ -34,11 +34,46 @@ pub trait Factory {
     /// Creates an instance.
     fn create(&self) -> Self::Item;
 }
+impl<T: ?Sized + Factory> Factory for &T {
+    type Item = T::Item;
+
+    fn create(&self) -> Self::Item {
+        (**self).create()
+    }
+}
 impl<T: ?Sized + Factory> Factory for Box<T> {
     type Item = T::Item;
 
     fn create(&self) -> Self::Item {
         (**self).create()
+    }
+}
+
+/// This trait allows for creating any number of instances of the `Item` type with the given parameter.
+pub trait ParameterizedFactory {
+    /// The type of instances created by this factory.
+    type Item;
+
+    /// The type of parameter.
+    type Parameter;
+
+    /// Creates an instance.
+    fn create(&self, param: Self::Parameter) -> Self::Item;
+}
+impl<T: ?Sized + ParameterizedFactory> ParameterizedFactory for &T {
+    type Item = T::Item;
+    type Parameter = T::Parameter;
+
+    fn create(&self, param: Self::Parameter) -> Self::Item {
+        (**self).create(param)
+    }
+}
+impl<T: ?Sized + ParameterizedFactory> ParameterizedFactory for Box<T> {
+    type Item = T::Item;
+    type Parameter = T::Parameter;
+
+    fn create(&self, param: Self::Parameter) -> Self::Item {
+        (**self).create(param)
     }
 }
 
