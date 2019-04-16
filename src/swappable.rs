@@ -1,7 +1,6 @@
+use crate::Factory;
 use atomic_immut::AtomicImmut;
 use std::sync::Arc;
-
-use Factory;
 
 /// `#[cfg(feature = "swappable")]` A `Factory` that allows for swapping inner factories dynamically.
 ///
@@ -57,7 +56,7 @@ impl<T> Clone for SwappableFactory<T> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use {CloneFactory, DefaultFactory, Factory};
+    use crate::{CloneFactory, DefaultFactory, Factory};
 
     #[test]
     fn swappable_factory_works() {

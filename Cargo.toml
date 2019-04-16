@@ -7,6 +7,7 @@ homepage = "https://github.com/sile/factory"
 repository = "https://github.com/sile/factory"
 readme = "README.md"
 license = "MIT"
+edition = "2018"
 
 [badges]
 travis-ci = {repository = "sile/factory"}
